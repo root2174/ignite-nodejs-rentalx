@@ -1,21 +1,16 @@
 import { Router } from 'express';
 
-import { CategoryDTO } from '../Modules/Cars/DTO/CategoryDTO';
-import { CategoriesRepository } from '../Modules/Cars/Repositories/CategoriesRepository';
 import { createCategoryController } from '../Modules/Cars/UseCases/Categories/CreateCategory';
+import { listCategoriesController } from '../Modules/Cars/UseCases/Categories/ListCategories';
 
 const categoriesRoutes = Router();
 
-const categoriesRepository = new CategoriesRepository();
+categoriesRoutes.post('/', (req, res) =>
+  createCategoryController.handle(req, res),
+);
 
-categoriesRoutes.post('/', createCategoryController.handle);
-
-categoriesRoutes.get('/', (request, response) => {
-  const categories: CategoryDTO[] = categoriesRepository
-    .findAll()
-    .map(category => CategoryDTO.fromCategory(category));
-
-  return response.json(categories);
-});
+categoriesRoutes.get('/', (req, res) =>
+  listCategoriesController.handle(req, res),
+);
 
 export { categoriesRoutes };

@@ -1,7 +1,7 @@
 import { Specification } from '../Models/Specification';
 
 interface ISpecificationsRepository {
-  create(specification: Specification): void;
+  create(specification: Specification): Specification;
   findByName(name: string): Specification | undefined;
 }
 

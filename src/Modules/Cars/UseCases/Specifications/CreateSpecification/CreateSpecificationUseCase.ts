@@ -1,28 +1,22 @@
 import { ISpecificationForm } from '../../../Forms/ISpecificationForm';
-import { Specification } from '../../../Models/Specification';
-import { ISpecificationsRepository } from '../../../Repositories/ISpecificationsRepository';
+import { prismaClient } from './../../../../../database/index';
 
 class CreateSpecificationUseCase {
-  constructor(
-    private readonly specificationRepository: ISpecificationsRepository,
-  ) {}
-
-  create({ name, description }: ISpecificationForm) {
-    const specification = new Specification.Builder()
-      .setName(name)
-      .setDescription(description)
-      .setCreatedAt(new Date())
-      .build();
-
-    const specificationExists = this.specificationRepository.findByName(
-      specification.name,
-    );
+  async create({ name, description }: ISpecificationForm) {
+    const specificationExists = await prismaClient.specification.findFirst({
+      where: { name },
+    });
 
     if (specificationExists) {
       throw new Error('Specification already exists');
     }
 
-    return this.specificationRepository.create(specification);
+    return await prismaClient.specification.create({
+      data: {
+        name,
+        description,
+      },
+    });
   }
 }
 

@@ -3,7 +3,7 @@ import { ImportCategoryUseCase } from './ImportCategoryUseCase';
 
 class ImportCategoryController {
   constructor(private importCategoryUseCase: ImportCategoryUseCase) {}
-  handle(request: Request, response: Response): Response {
+  async handle(request: Request, response: Response): Promise<Response> {
     const { file } = request;
 
     if (!file) {
@@ -13,7 +13,7 @@ class ImportCategoryController {
     }
 
     try {
-      this.importCategoryUseCase.execute(file);
+      await this.importCategoryUseCase.execute(file);
       return response.send();
     } catch (err) {
       return response.status(400).json({

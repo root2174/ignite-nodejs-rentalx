@@ -5,12 +5,13 @@ import { ListCategoriesUseCase } from './ListCategoriesUseCase';
 class ListCategoriesController {
   constructor(private readonly listCategoriesUseCase: ListCategoriesUseCase) {}
 
-  handle(request: Request, response: Response): Response {
-    const categories = this.listCategoriesUseCase
-      .execute()
-      .map(category => CategoryDTO.fromCategory(category));
+  async handle(request: Request, response: Response): Promise<Response> {
+    const categories = await this.listCategoriesUseCase.execute();
+    const categoriesDTO = categories.map(category => {
+      return CategoryDTO.fromCategory(category);
+    });
 
-    return response.json(categories);
+    return response.json(categoriesDTO);
   }
 }
 

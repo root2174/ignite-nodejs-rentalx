@@ -1,11 +1,9 @@
-import { Category } from '../../../Models/Category';
-import { ICategoriesRepository } from '../../../Repositories/ICategoriesRepository';
+import { Category } from '@prisma/client';
+import { prismaClient } from '../../../../../database';
 
 class ListCategoriesUseCase {
-  constructor(private readonly categoriesRepository: ICategoriesRepository) {}
-
-  execute(): Category[] {
-    return this.categoriesRepository.findAll();
+  async execute(): Promise<Category[]> {
+    return await prismaClient.category.findMany();
   }
 }
 

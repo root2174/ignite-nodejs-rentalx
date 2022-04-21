@@ -14,8 +14,9 @@ categoriesRoutes.post('/', (req, res) =>
   createCategoryController.handle(req, res),
 );
 
-categoriesRoutes.get('/', (req, res) =>
-  listCategoriesController.handle(req, res),
+categoriesRoutes.get(
+  '/',
+  async (req, res) => await listCategoriesController.handle(req, res),
 );
 
 categoriesRoutes.post('/import', upload.single('file'), (req, res) =>

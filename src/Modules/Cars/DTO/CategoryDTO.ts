@@ -1,21 +1,21 @@
-import { Category } from '../Models/Category';
+import { Category } from '@prisma/client';
 
 class CategoryDTO {
   id: string;
   name: string;
   description: string;
-  created_at: Date;
+  createdAt: Date;
 
   private constructor(
     id: string,
     name: string,
     description: string,
-    created_at: Date,
+    createdAt: Date,
   ) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.created_at = created_at;
+    this.createdAt = createdAt;
   }
 
   static fromCategory(category: Category): CategoryDTO {
@@ -23,7 +23,7 @@ class CategoryDTO {
       category.id,
       category.name,
       category.description,
-      category.created_at,
+      category.createdAt,
     );
   }
 }

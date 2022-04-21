@@ -1,16 +1,12 @@
 import { parse } from 'csv-parse';
 import fs from 'fs';
-import { Category } from '../../../Models/Category';
-import { CategoriesRepository } from '../../../Repositories/Implementations/CategoriesRepository';
-
+import { prismaClient } from './../../../../../database/index';
 interface IImportCategory {
   name: string;
   description: string;
 }
 
 class ImportCategoryUseCase {
-  constructor(private categoriesRepository: CategoriesRepository) {}
-
   loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(file.path);
@@ -45,15 +41,17 @@ class ImportCategoryUseCase {
       categories.map(async category => {
         const { name, description } = category;
 
-        const existCategory = this.categoriesRepository.findByName(name);
+        const existCategory = await prismaClient.category.findFirst({
+          where: { name },
+        });
 
         if (!existCategory) {
-          const newCategory = new Category.Builder()
-            .setName(name)
-            .setDescription(description)
-            .build();
-
-          this.categoriesRepository.create(newCategory);
+          await prismaClient.category.create({
+            data: {
+              description: description,
+              name: name,
+            },
+          });
         }
       });
     } catch (err) {

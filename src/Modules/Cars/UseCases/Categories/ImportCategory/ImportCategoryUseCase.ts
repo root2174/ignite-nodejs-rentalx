@@ -1,11 +1,13 @@
 import { parse } from 'csv-parse';
 import fs from 'fs';
+import { injectable } from 'tsyringe';
 import { prismaClient } from './../../../../../database/index';
 interface IImportCategory {
   name: string;
   description: string;
 }
 
+@injectable()
 class ImportCategoryUseCase {
   loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
     return new Promise((resolve, reject) => {

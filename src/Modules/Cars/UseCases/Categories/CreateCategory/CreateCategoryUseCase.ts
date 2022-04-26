@@ -1,7 +1,8 @@
+import { injectable } from 'tsyringe';
 import { CategoryDTO } from '../../../DTO/CategoryDTO';
 import { ICategoryForm } from '../../../Forms/ICategoryForm';
 import { prismaClient } from './../../../../../database/index';
-
+@injectable()
 class CreateCategoryUseCase {
   async execute({ name, description }: ICategoryForm): Promise<CategoryDTO> {
     const categoryExists = await prismaClient.category.findFirst({

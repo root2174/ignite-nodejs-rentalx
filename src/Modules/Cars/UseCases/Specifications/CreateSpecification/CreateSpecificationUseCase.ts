@@ -1,6 +1,8 @@
+import { injectable } from 'tsyringe';
 import { ISpecificationForm } from '../../../Forms/ISpecificationForm';
 import { prismaClient } from './../../../../../database/index';
 
+@injectable()
 class CreateSpecificationUseCase {
   async create({ name, description }: ISpecificationForm) {
     const specificationExists = await prismaClient.specification.findFirst({

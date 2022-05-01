@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { prismaClient } from '../../../../database';
+import prisma from '../../../../database';
 import { deleteFile } from '../../../../utils/file';
 
 interface IRequest {
@@ -10,7 +10,7 @@ interface IRequest {
 @injectable()
 export class UpdateUserAvatarUseCase {
   async execute({ avatar, userId: id }: IRequest): Promise<void> {
-    const user = await prismaClient.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id },
     });
 
@@ -18,7 +18,7 @@ export class UpdateUserAvatarUseCase {
       await deleteFile(`./tmp/avatar/${user.avatar}`);
     }
 
-    await prismaClient.user.update({
+    await prisma.user.update({
       where: {
         id,
       },

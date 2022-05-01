@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { injectable } from 'tsyringe';
-import { prismaClient } from '../../../../database';
+import prisma from '../../../../database';
 
 interface IRequest {
   email: string;
@@ -20,7 +20,7 @@ interface IResponse {
 @injectable()
 export class AuthenticateUserUseCase {
   async execute({ email, password }: IRequest): Promise<IResponse> {
-    const user = await prismaClient.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },

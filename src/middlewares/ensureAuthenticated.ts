@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import { verify } from 'jsonwebtoken';
 import { AppError } from '../errors/AppError';
-import { prismaClient } from './../database/index';
+import prisma from './../database/index';
 
 export async function ensureAuthenticated(
   request: Request,
@@ -22,7 +22,7 @@ export async function ensureAuthenticated(
   try {
     const { sub: userId } = verify(token, jwtSecret);
 
-    const user = await prismaClient.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         id: userId as string,
       },

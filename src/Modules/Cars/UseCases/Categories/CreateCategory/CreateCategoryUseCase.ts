@@ -1,19 +1,20 @@
 import { injectable } from 'tsyringe';
+import { AppError } from '../../../../../errors/AppError';
 import { CategoryDTO } from '../../../DTO/CategoryDTO';
 import { ICategoryForm } from '../../../Forms/ICategoryForm';
-import { prismaClient } from './../../../../../database/index';
+import prisma from './../../../../../database/index';
 @injectable()
 class CreateCategoryUseCase {
   async execute({ name, description }: ICategoryForm): Promise<CategoryDTO> {
-    const categoryExists = await prismaClient.category.findFirst({
+    const categoryExists = await prisma.category.findFirst({
       where: { name },
     });
 
     if (categoryExists) {
-      throw new Error('Category already exists');
+      throw new AppError('Category already exists');
     }
 
-    const category = await prismaClient.category.create({
+    const category = await prisma.category.create({
       data: {
         description: description,
         name,

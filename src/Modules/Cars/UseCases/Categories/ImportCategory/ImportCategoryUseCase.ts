@@ -1,7 +1,7 @@
 import { parse } from 'csv-parse';
 import fs from 'fs';
 import { injectable } from 'tsyringe';
-import { prismaClient } from './../../../../../database/index';
+import prisma from './../../../../../database/index';
 interface IImportCategory {
   name: string;
   description: string;
@@ -43,12 +43,12 @@ class ImportCategoryUseCase {
       categories.map(async category => {
         const { name, description } = category;
 
-        const existCategory = await prismaClient.category.findFirst({
+        const existCategory = await prisma.category.findFirst({
           where: { name },
         });
 
         if (!existCategory) {
-          await prismaClient.category.create({
+          await prisma.category.create({
             data: {
               description: description,
               name: name,

@@ -1,3 +1,4 @@
+import { AppError } from '@errors/AppError';
 import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { injectable } from 'tsyringe';
@@ -27,13 +28,13 @@ export class AuthenticateUserUseCase {
     });
 
     if (!user) {
-      throw new Error('Email or password invalid');
+      throw new AppError('Email or password invalid');
     }
 
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new Error('Email or password invalid');
+      throw new AppError('Email or password invalid');
     }
 
     const jwtSecret = process.env.JWT_SECRET as string;
